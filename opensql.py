@@ -44,7 +44,7 @@ for (image_url,) in cursor:
             if (len(parts) >2):
                 desired_number = parts[2]
                 #print(f"id: {desired_number}")
-                image_dir = f"D:/labwork/proc_image/new_images/{desired_number}/"
+                image_dir = f"D:/labwork/proc_image/new_images/{desired_number}/" #replace with your actual directory path
                 if not os.path.exists(image_dir):
                     os.makedirs(image_dir)
                 filepath = os.path.join(image_dir, filename)
