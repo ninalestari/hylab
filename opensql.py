@@ -2,11 +2,11 @@ import mysql.connector
 import requests
 import os
 
-# Database connection parameters
-host = "lms.pptik.id"  # Often this is 'localhost' or an IP address
-database = "moodle"  # Your Moodle database name
-user = "adminmoodle"
-password = "Pptik2023!"
+# Database connection parameters change to yours
+host=host,
+database=database,
+user=user,
+password=password
 
 # Establishing the connection
 conn = mysql.connector.connect(
