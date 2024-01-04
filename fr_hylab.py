@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import os
 import pymongo
 from datetime import datetime
-#from hylabprocessing import imageprocessing
 import wget
 import sys
 from ftplib import FTP
@@ -15,10 +14,7 @@ import face_recognition
 from PIL import Image, ImageDraw, UnidentifiedImageError
 import numpy as np
 import cv2
-#from keras_preprocessing import image
-#import tensorflow as tf
-#from tensorflow.keras.Models import model_from_json
-#import matplotlib.pyplot as plt
+
 
 load_dotenv(".env")
 
@@ -33,9 +29,9 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     report, log = DbConnection()
 
-    ftp_server = "ftp-sth.pptik.id"
-    username = "hylab"
-    password = "hy4umlbT!1"
+    ftp_server = os.environ.get("FTP_SERVER")
+    username = os.environ.get("FTP_USER")
+    password = os.environ.get("FTP_PASS")
 
     # Encode the username and password for the URL
     encoded_username = quote(username, safe='')
@@ -51,10 +47,8 @@ def on_message(client, userdata, msg):
     dt = datetime.fromtimestamp(current_time)
     fdt = dt.strftime("%d-%m-%Y %H:%M:%S")
     print("Received message: " + msg_text, "time: ", fdt)
-    #print("Received message time:", fdt)
     file_name = msg_text
     remote_file_path = "/raw_data/{}".format(file_name)
-    # remote_file_path = "/raw_data/ff116e8e8e73-0K1vf2c2x.jpg"
     local_file_path = "D:/labwork/download_image/{}".format(
         file_name)
     
@@ -63,14 +57,10 @@ def on_message(client, userdata, msg):
     try:
         with open(local_file_path, "wb") as local_file:
             ftp.retrbinary("RETR " + remote_file_path, local_file.write)
-        #print("File downloaded successfully!")
     except Exception as e:
-        #print("Error downloading file:", str(e))
         pass
 
-    # This is an example of running face recognition on a single image
-    # and drawing a box around each person that was identified.
-    
+  
     # Load a sample picture from folder
     image_directory = "D:/labwork/face_model"
     # Arrays to hold face encodings and names
@@ -96,8 +86,7 @@ def on_message(client, userdata, msg):
                 known_face_names.append(os.path.splitext(filename)[0])
 
 # Load an image with an unknown face
-    #unknown_image = face_recognition.load_image_file("C:/Users/ASUS/Downloads/download_image/ff116e8e8e73-xMmVLFxqh.jpg")
-    
+       
     try:
         unknown_image = face_recognition.load_image_file(local_file_path)
 
@@ -105,8 +94,6 @@ def on_message(client, userdata, msg):
         face_locations = face_recognition.face_locations(unknown_image)
         face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
 
-        # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-        # See http://pillow.readthedocs.io/ for more about PIL/Pillow
         pil_image = Image.fromarray(unknown_image)
         # Create a Pillow ImageDraw Draw instance to draw with
         draw = ImageDraw.Draw(pil_image)
