@@ -9,7 +9,8 @@ model_path = "D:/labwork/shape_predictor_68_face_landmarks.dat"
 predictor = dlib.shape_predictor(model_path)
 
 # Start video capture from webcam
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('rtmp://167.205.66.10:1935' )
 
 while True:
     # Capture frame-by-frame
@@ -32,8 +33,8 @@ while True:
         right_eye = landmarks.part(45).x, landmarks.part(45).y
 
         # Draw circles on the eye positions
-        cv2.circle(frame, left_eye, 5, (0, 255, 0), -1)
-        cv2.circle(frame, right_eye, 5, (0, 255, 0), -1)
+        cv2.circle(frame, left_eye, 2, (0, 255, 0), -1)
+        cv2.circle(frame, right_eye, 2, (0, 255, 0), -1)
         time = datetime.now()
 
         # Print eye positions
@@ -50,3 +51,5 @@ while True:
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+
+#coba buat bounding box di wajah dan terjemahkan arahnya ke dalam bentuk text
